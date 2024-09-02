@@ -1,9 +1,7 @@
 <?php
 
-use Monolog\Handler\NullHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Handler\SyslogUdpHandler;
-use Monolog\Processor\PsrLogMessageProcessor;
+use App\Utils\LogFormatterUtil;
+use Monolog\Handler\RotatingFileHandler;
 
 return [
 
@@ -51,82 +49,127 @@ return [
     */
 
     'channels' => [
-
+        // 默认日志
         'stack' => [
             'driver' => 'stack',
-            'channels' => explode(',', env('LOG_STACK', 'single')),
-            'ignore_exceptions' => false,
+            'channels' => ['app', 'error'],
         ],
-
-        'single' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
-            'replace_placeholders' => true,
-        ],
-
-        'daily' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
-            'days' => env('LOG_DAILY_DAYS', 14),
-            'replace_placeholders' => true,
-        ],
-
-        'slack' => [
-            'driver' => 'slack',
-            'url' => env('LOG_SLACK_WEBHOOK_URL'),
-            'username' => env('LOG_SLACK_USERNAME', 'Laravel Log'),
-            'emoji' => env('LOG_SLACK_EMOJI', ':boom:'),
-            'level' => env('LOG_LEVEL', 'critical'),
-            'replace_placeholders' => true,
-        ],
-
-        'papertrail' => [
+        // 业务日志
+        'app' => [
             'driver' => 'monolog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'handler' => env('LOG_PAPERTRAIL_HANDLER', SyslogUdpHandler::class),
-            'handler_with' => [
-                'host' => env('PAPERTRAIL_URL'),
-                'port' => env('PAPERTRAIL_PORT'),
-                'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
-            ],
-            'processors' => [PsrLogMessageProcessor::class],
-        ],
-
-        'stderr' => [
-            'driver' => 'monolog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'handler' => StreamHandler::class,
-            'formatter' => env('LOG_STDERR_FORMATTER'),
+            'handler' => RotatingFileHandler::class,
             'with' => [
-                'stream' => 'php://stderr',
+                'filename' => storage_path('logs/app.log'),
+                'maxFiles' => 10,
+                'level' => 'debug',
+                'filePermission' => 0777,
+                'dateFormat' => 'Ymd',
             ],
-            'processors' => [PsrLogMessageProcessor::class],
+            'formatter' => LogFormatterUtil::class,
         ],
-
-        'syslog' => [
-            'driver' => 'syslog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'facility' => env('LOG_SYSLOG_FACILITY', LOG_USER),
-            'replace_placeholders' => true,
-        ],
-
-        'errorlog' => [
-            'driver' => 'errorlog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'replace_placeholders' => true,
-        ],
-
-        'null' => [
+        // 错误日志
+        'error' => [
             'driver' => 'monolog',
-            'handler' => NullHandler::class,
+            'handler' => RotatingFileHandler::class,
+            'with' => [
+                'filename' => storage_path('logs/error.log'),
+                'maxFiles' => 10,
+                'level' => 'error',
+                'filePermission' => 0777,
+                'dateFormat' => 'Ymd',
+            ],
+            'formatter' => LogFormatterUtil::class,
         ],
-
-        'emergency' => [
-            'path' => storage_path('logs/laravel.log'),
+        // 请求日志
+        'access' => [
+            'driver' => 'monolog',
+            'handler' => RotatingFileHandler::class,
+            'with' => [
+                'filename' => storage_path('logs/access.log'),
+                'maxFiles' => 10,
+                'level' => 'debug',
+                'filePermission' => 0777,
+                'dateFormat' => 'Ymd',
+            ],
+            'formatter' => LogFormatterUtil::class,
         ],
-
+        // SQL日志
+        'sql' => [
+            'driver' => 'monolog',
+            'handler' => RotatingFileHandler::class,
+            'with' => [
+                'filename' => storage_path('logs/sql.log'),
+                'maxFiles' => 10,
+                'level' => 'debug',
+                'filePermission' => 0777,
+                'dateFormat' => 'Ymd',
+            ],
+            'formatter' => LogFormatterUtil::class,
+        ],
+        // SQL错误日志
+        'sql_error' => [
+            'driver' => 'monolog',
+            'handler' => RotatingFileHandler::class,
+            'with' => [
+                'filename' => storage_path('logs/sql_err.log'),
+                'maxFiles' => 10,
+                'level' => 'debug',
+                'filePermission' => 0777,
+                'dateFormat' => 'Ymd',
+            ],
+            'formatter' => LogFormatterUtil::class,
+        ],
+        // 慢SQL日志
+        'sql_slow' => [
+            'driver' => 'monolog',
+            'handler' => RotatingFileHandler::class,
+            'with' => [
+                'filename' => storage_path('logs/sql_slow.log'),
+                'maxFiles' => 10,
+                'level' => 'debug',
+                'filePermission' => 0777,
+                'dateFormat' => 'Ymd',
+            ],
+            'formatter' => LogFormatterUtil::class,
+        ],
+        // 发送请求日志
+        'send_request' => [
+            'driver' => 'monolog',
+            'handler' => RotatingFileHandler::class,
+            'with' => [
+                'filename' => storage_path('logs/send_req.log'),
+                'maxFiles' => 10,
+                'level' => 'debug',
+                'filePermission' => 0777,
+                'dateFormat' => 'Ymd',
+            ],
+            'formatter' => LogFormatterUtil::class,
+        ],
+        // 发送请求错误日志
+        'send_request_error' => [
+            'driver' => 'monolog',
+            'handler' => RotatingFileHandler::class,
+            'with' => [
+                'filename' => storage_path('logs/send_req_err.log'),
+                'maxFiles' => 10,
+                'level' => 'debug',
+                'filePermission' => 0777,
+                'dateFormat' => 'Ymd',
+            ],
+            'formatter' => LogFormatterUtil::class,
+        ],
+        // 任务运行日志
+        'queue_run' => [
+            'driver' => 'monolog',
+            'handler' => RotatingFileHandler::class,
+            'with' => [
+                'filename' => storage_path('logs/queue_run.log'),
+                'maxFiles' => 10,
+                'level' => 'debug',
+                'filePermission' => 0777,
+                'dateFormat' => 'Ymd',
+            ],
+            'formatter' => LogFormatterUtil::class,
+        ],
     ],
-
 ];

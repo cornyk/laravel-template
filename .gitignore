@@ -1,20 +1,53 @@
-/.phpunit.cache
-/node_modules
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
-/vendor
+# environment config files
 .env
-.env.backup
-.env.production
-.phpactor.json
+
+# phpstorm project files
+.idea/
+
+# vscode project files
+.vscode/
+
+# netbeans project files
+nbproject
+
+# zend studio for eclipse project files
+.buildpath
+.project
+.settings
+
+# windows thumbnail cache
+Thumbs.db
+
+# composer vendor dir
+vendor/
+
+# composer itself is not needed
+composer.phar
+
+# Mac DS_Store Files
+.DS_Store
+
+# phpunit itself is not needed
+phpunit.phar
 .phpunit.result.cache
-Homestead.json
-Homestead.yaml
-auth.json
+
+# ide helper
+.phpstorm.meta.php
+_ide_helper.php
+_ide_helper_models.php
+
+# node files
+node_modules/
+package.json
+package-lock.json
 npm-debug.log
 yarn-error.log
-/.fleet
-/.idea
-/.vscode
+
+# laravel octane frankenphp files
+caddy/
+frankenphp
+frankenphp-worker.php
+
+# laravel octane roadrunner files
+rr
+.rr.yaml
