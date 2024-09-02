@@ -1,5 +1,13 @@
 # Laravel 模板项目（仅API项目）
 
+### 使用本项目
+
+```bash
+composer create-project cornyk/laravel-template:dev-master {your_project_name}
+```
+
+
+
 ### 使用`Laravel Octane`启动应用
 
 + 开发
