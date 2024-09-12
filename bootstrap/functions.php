@@ -6,9 +6,11 @@
 if (!function_exists('get_trace_id')) {
     function get_trace_id(): string
     {
-        if (empty($GLOBALS['traceId'])) {
-            $GLOBALS['traceId'] = md5(time() . mt_rand(100000, 999999));
+        $traceId = request()->offsetGet('traceId');
+        if (!isset($traceId)) {
+            $traceId = md5(time() . mt_rand(100000, 999999));
+            request()->offsetSet('traceId', $traceId);
         }
-        return $GLOBALS['traceId'];
+        return $traceId;
     }
 }

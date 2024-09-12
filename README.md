@@ -12,6 +12,9 @@ composer create-project cornyk/laravel-template:dev-master {your_project_name}
 
 + 开发
 ```bash
+# 使用前需要先执行以下命令
+npm install --save-dev chokidar
+
 ./octane_start.sh dev
 ```
 
