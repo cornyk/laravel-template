@@ -2,14 +2,22 @@
 
 use App\Commons\RespDef;
 use App\Utils\RespUtil;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 /**
  * @var Illuminate\Foundation\Configuration\Exceptions $exceptions
  */
+$exceptions->dontReport([
+    AuthorizationException::class,
+    HttpException::class,
+    ValidationException::class,
+]);
+
 $exceptions->report(function (\Throwable $e) {
     // 如果异常抛出时在事务中，需要手动回滚事务
     if (DB::transactionLevel() > 0) {

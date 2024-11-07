@@ -3,6 +3,7 @@
     "description": "The Laravel framework.",
     "require": {
         "php": "^8.2",
+        "ext-http": "*",
         "ext-pdo": "*",
         "laravel/framework": "^11.9",
         "laravel/octane": "^2.5",

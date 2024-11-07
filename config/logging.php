@@ -93,6 +93,19 @@ return [
             ],
             'formatter' => LogFormatterUtil::class,
         ],
+        // cli运行日志
+        'cli' => [
+            'driver' => 'monolog',
+            'handler' => RotatingFileHandler::class,
+            'with' => [
+                'filename' => storage_path('logs/cli.log'),
+                'maxFiles' => 10,
+                'level' => 'debug',
+                'filePermission' => 0777,
+                'dateFormat' => 'Ymd',
+            ],
+            'formatter' => LogFormatterUtil::class,
+        ],
         // SQL日志
         'sql' => [
             'driver' => 'monolog',

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Listeners\CommandFinishedListener;
 use App\Listeners\QueryExecutedListener;
+use Illuminate\Console\Events\CommandFinished;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,6 +18,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         QueryExecuted::class => [
             QueryExecutedListener::class,
+        ],
+        CommandFinished::class => [
+            CommandFinishedListener::class,
         ],
     ];
 
